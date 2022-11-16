@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row my-5">
+        <div class="col-md-12">
+            <h4>ALL Destinations</h4>
+            <a href="{% url 'management:createdest_view' %}" class="btn btn-indigo btn-primary btn-sm m-0 float-end">Create</a>
+            <table class="table table-striped table-responsive-md  btn-table">
+
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Destination Name</th>
+                    
+                    <th></th>
+                    <th></th
+                    
+                  </tr>
+                </thead>
+                
+                <tbody>
+                {% for destination in All_Destinations_Var %}
+                  <tr>
+                    <th scope="row"></th>
+                    <td><a href="{% url 'management:showdest_view' destination.slug %}">{{destination.name}}</a></td>
+                    <td>
+                        <a href="{% url 'management:updatedest_view' destination.slug %}" class="btn btn-indigo btn-warning btn-sm m-0">Update</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'management:deletedest_view' destination.slug %}" class="btn btn-indigo btn-danger btn-sm m-0">Delete</a>
+                    </td>
+                    
+                  </tr>
+                  {% endfor %} 
+                </tbody>
+                
+                </table>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}

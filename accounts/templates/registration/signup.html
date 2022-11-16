@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+{% block body %}
+
+ 
+
+<div class="container">
+  <div class="row my-5">
+      <div class="col-md-12">
+        <form method="post">
+          {% csrf_token %}
+          {% bootstrap_form signupform %}
+          <input type="submit" value="Register Now" class="boxed-btn3 w-100" />
+        
+        </form>
+      </div>
+  </div>
+</div>
+
+  
+
+  
+
+{% endblock body %}
+
+
+
+

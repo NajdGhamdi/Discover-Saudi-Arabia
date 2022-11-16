@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row my-5">
+        <div class="col-md-12">
+            <h4>Update Your Event</h4>
+            <form method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form updateevent_form %}
+                
+                {% buttons %}
+                    <button class="boxed-btn3 w-100" type="submit">Update</button>
+                {% endbuttons %}
+
+                    
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
+
+
+
+
+
+
+
+
+
+

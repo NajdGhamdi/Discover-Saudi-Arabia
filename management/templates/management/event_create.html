@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row my-5">
+        <div class="col-md-12">
+            <h4>Create New Event</h4>
+            <a href="{% url 'management:createevent_view' %}" class="btn btn-indigo btn-primary btn-sm m-0 float-end">Create</a>
+            <form method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form event_form %}
+                
+                {% buttons %}
+                    <button class="boxed-btn3 w-100" type="submit">Create</button>
+                {% endbuttons %}
+
+                    
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock body %}
+
+
+
+
+
+
+
+
+
+

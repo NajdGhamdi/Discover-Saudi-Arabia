@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+{% block body %}
+
+
+<main class="bg-light">
+  <section class="bg-dark text-light mt-4  bg-white" 
+  style="height: 75vh; min-height: 300px; background-image: url('{{Destination_detail_Var.image.url}}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <div class="container h-80 ">
+      <div class="row h-100 align-items-center">
+        <div class="col-12 text-left ">
+          <h1 class="fw-bold text-light"> <i>{{Destination_detail_Var.name}}</i> </h1>
+          <p class=" fw-bold text-light ">City in Saudia Arabia</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <div class="b-example-divider bg-light"></div>
+
+  <section class="p-5 w-100">
+    <div class="col-md-12 ">
+      <div class="h-100 p-5 border rounded-3 ">
+        <h2  class="display-5 fw-bold text-dark">Explore {{Destination_detail_Var.name}} history </h2>
+        <p class="lead fw-bold ">{{Destination_detail_Var.summary}}</p>
+      </div>
+    </div>
+  </section>
+
+
+  
+
+
+
+  <div class="b-example-divider bg-light"></div>
+<!-- Historical Sites -->
+  <section class="p-5">
+    <div class="container">
+    
+      <div class="album py-5 bg-white border rounded-5">
+        <div class="container px-4 py-2">
+          <h2 class="pb-2 border-bottom">Explore Best Historical sites in {{Destination_detail_Var.name}} City</h2>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          {% for site in Sites_list_Var %}
+          {% if site.destination.name == Destination_detail_Var.name %}
+            <div class="col" >
+              <a href="{% url 'destination:site_detail_view' site.slug %}" class="text-decoration-none">
+                <div class="card shadow-sm ">
+                  <img src="{{site.image.url}}" class="card-img-top" width="100%" height="400px" alt="...">
+                  <div class="card-body">
+  
+                    <h5 class="card-title text-dark">{{site.name}}</h5>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endif %}
+          {% endfor %}
+
+           
+          
+          
+  
+  
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  
+  </section>
+  
+
+
+  <div class="b-example-divider bg-light"></div>
+
+  <section class="p-3 w-100 bg-white">
+    <div >
+      <h2 class="text-center text-dark left-aligned">Events in {{Destination_detail_Var.name}}</h2>
+  </div>
+
+  {% for event in Events_list_Var  %}
+  {% if event.destination.name == Destination_detail_Var.name %}
+  <div class="container col-xxl-8 px-0 py-0 mb-2 bg-light border rounded-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+     
+      <div class="col-sm-12 col-lg-6">
+        <a href="{% url 'destination:event_detail_view' event.slug %}" class="text-decoration-none">
+        <img src="{{event.image.url}}"  class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+      </a>
+      </div>
+    
+      <div class="col-lg-6">
+        <h1 class="display-6 fw-bold text-dark lh-1 mb-2">{{event.name}}</h1>
+       
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a href="{% url 'destination:event_detail_view' event.slug %}" class="text-decoration-none">
+          <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Explore</button>
+        </a>
+           
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% endfor %}
+
+</section>
+
+
+<div class="b-example-divider bg-light"></div>
+
+{% if request.user.is_authenticated  %}
+
+<section class="p-5">
+  <div >
+    <h2 class="text-center text-dark left-aligned">ADD A comment</h2>
+</div>
+    <div class="container my-5 py-5">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-12 col-lg-10 col-xl-8">
+          <div class="card">
+            {% for comment in Destination_detail_Var.comments.all %}
+            <div class="card-body border-bottom">
+              <div class="d-flex flex-start align-items-center">
+                <img class="rounded-circle shadow-1-strong me-3"
+                src="{% static 'logo/file-person.svg' %}" alt="avatar" width="60"
+                  height="60" />
+                  
+                <div>
+                  <h6 class="fw-bold text-primary mb-1">{{ comment.username }}</h6>
+                  <p class="text-muted small mb-0">
+                    Added At - {{ comment.date_added }}
+                  </p>
+                </div>
+              </div>
+  
+              <p class="mt-3 mb-4 pb-2">
+                {{ comment.body }}.
+              </p>
+            {% if request.user == comment.author or request.user.is_superuser %}
+              <a href="{% url 'destination:delete_comment_view' comment.id %}" class="btn btn-outline-danger btn-sm float-end">Delete</a>
+            </div>
+            {% endif %}
+            {% empty %}
+                <div class="text-center">
+                    <p>No comments yet!</p>
+                </div>
+            {% endfor %}
+
+            <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+              <div class="d-flex flex-start w-100">
+                <img class="rounded-circle shadow-1-strong me-3"
+                  src="{% static 'logo/file-person.svg' %}" alt="avatar" width="40"
+                  height="40" />
+                <div class="form-outline w-100">
+                  <div class="container">
+                    <div class="row my-5">
+                        <div class="col-md-12">
+                          <form method='POST' enctype="multipart/form-data">
+                              {% csrf_token %}
+                              
+                                  
+                                  {% bootstrap_form CommentForm %}
+                                  {% buttons %}
+                                  <input type="submit" value="Send A Reply" class="boxed-btn3 w-100" />
+                                  {% endbuttons %}
+                              
+                          </form>
+
+                        </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+  
+
+</section>
+
+{% endif %}
+
+ <section class="p-5">
+  <div class="container">
+  
+    <div class="album py-5 bg-white border rounded-5">
+      <div class="container px-4 py-2">
+        <h2 class="pb-2 border-bottom">Explore other cities in Saudi</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for city in Destinations_list_Var %}
+        {% if city.name != Destination_detail_Var.name %}
+          <div class="col" >
+            
+            
+            <a href='{% url 'destination:destination_detail_view' city.slug %}' class="text-decoration-none">
+              <div class="card shadow-sm ">
+                <img src="{{city.image.url}}" class="card-img-top" width="100%" height="300px" alt="...">
+                <div class="card-body">
+
+                  <h5 class="card-title text-dark">{{city.name}}</h5>
+                </div>
+              </div>
+            </a>
+          </div>
+          {% endif %}
+
+          {% endfor %}
+        
+        
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</section> 
+
+
+</main>
+
+<div class="b-example-divider bg-light"></div>
+<!-- Hereeeeeeeeeeeeee -->
+
+
+
+
+{% endblock body %}
+ 
+  
+
+  
+
+  
+  
